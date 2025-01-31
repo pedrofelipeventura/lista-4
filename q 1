@@ -1,0 +1,117 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define N 5  // Número de linhas da imagem (pode ser alterado)
+#define M 5  // Número de colunas da imagem (pode ser alterado)
+
+// Função para gerar uma imagem pseudoaleatória no intervalo [0, 255]
+void gerarImagem(unsigned char imagem[N][M]) {
+    srand(time(NULL));  // Inicializa o gerador de números aleatórios
+
+    // Preenche a imagem com valores aleatórios entre 0 e 255
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < M; j++) {
+            imagem[i][j] = rand() % 256;  // Gera números entre 0 e 255
+        }
+    }
+}
+
+// Função para calcular o LBP para um pixel dado
+unsigned char calcularLBP(unsigned char imagem[N][M], int i, int j) {
+    unsigned char lbp = 0;
+    int k = 0;  // Índice para os bits do LBP
+
+    // Loop sobre os vizinhos da janela 3x3 (em sentido horário)
+    for (int di = -1; di <= 1; di++) {
+        for (int dj = -1; dj <= 1; dj++) {
+            // Ignora o pixel central
+            if (di == 0 && dj == 0) continue;
+
+            int ni = i + di;
+            int nj = j + dj;
+
+            // Verifica se o vizinho está dentro da imagem
+            if (ni < 0 || ni >= N || nj < 0 || nj >= M) {
+                // Se for fora da imagem, consideramos o valor como 0
+                if (imagem[i][j] <= 0) {
+                    lbp |= (1 << k);  // Define o bit correspondente como 1
+                }
+            } else {
+                // Compara o vizinho com o pixel central
+                if (imagem[ni][nj] >= imagem[i][j]) {
+                    lbp |= (1 << k);  // Define o bit correspondente como 1
+                }
+            }
+
+            k++;
+        }
+    }
+
+    return lbp;
+}
+
+// Função para calcular a imagem LBP
+void calcularImagemLBP(unsigned char imagem[N][M], unsigned char imagemLBP[N][M]) {
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < M; j++) {
+            imagemLBP[i][j] = calcularLBP(imagem, i, j);
+        }
+    }
+}
+
+// Função para calcular o histograma da imagem LBP
+void calcularHistograma(unsigned char imagemLBP[N][M], int histograma[256]) {
+    for (int i = 0; i < 256; i++) {
+        histograma[i] = 0;
+    }
+
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < M; j++) {
+            histograma[imagemLBP[i][j]]++;
+        }
+    }
+}
+
+int main() {
+    unsigned char imagem[N][M];        // Matriz da imagem original
+    unsigned char imagemLBP[N][M];     // Matriz da imagem após LBP
+    int histograma[256];               // Vetor para armazenar o histograma
+
+    // Gerar a imagem pseudoaleatória
+    gerarImagem(imagem);
+
+    // Exibir a imagem original
+    printf("Imagem original (pseudoaleatória):\n");
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < M; j++) {
+            printf("%3d ", imagem[i][j]);
+        }
+        printf("\n");
+    }
+
+    // Calcular a imagem LBP
+    calcularImagemLBP(imagem, imagemLBP);
+
+    // Exibir a imagem LBP
+    printf("\nImagem LBP:\n");
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < M; j++) {
+            printf("%3d ", imagemLBP[i][j]);
+        }
+        printf("\n");
+    }
+
+    // Calcular o histograma da imagem LBP
+    calcularHistograma(imagemLBP, histograma);
+
+    // Exibir o histograma
+    printf("\nHistograma da imagem LBP:\n");
+    for (int i = 0; i < 256; i++) {
+        if (histograma[i] > 0) {
+            printf("Valor %d: %d ocorrências\n", i, histograma[i]);
+        }
+    }
+
+    return 0;
+}
