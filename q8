@@ -1,0 +1,27 @@
+#include <stdio.h>
+
+int main() {
+    char str[100], c;
+    char *p = str;
+    int encontrado = 0;
+
+    printf("Digite a string: ");
+    fgets(str, sizeof(str), stdin);
+    printf("Digite o caractere a buscar: ");
+    scanf(" %c", &c);
+
+    while (*p != '\0') {
+        if (*p == c) {
+            encontrado = 1;
+            break;
+        }
+        p++;
+    }
+
+    if (encontrado)
+        printf("Caractere '%c' encontrado!\n", c);
+    else
+        printf("Nao encontrado.\n");
+
+    return 0;
+}
