@@ -1,0 +1,18 @@
+#include <stdio.h>
+
+int main() {
+    char str[100];
+    char *p = str;
+    int len = 0;
+
+    printf("Digite uma string: ");
+    fgets(str, sizeof(str), stdin);
+
+    while (*p != '\0' && *p != '\n') {
+        len++;
+        p++;
+    }
+
+    printf("Tamanho: %d\n", len);
+    return 0;
+}
