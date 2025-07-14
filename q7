@@ -1,0 +1,28 @@
+#include <stdio.h>
+
+int main() {
+    char s1[100], s2[50];
+    char *p = s1;
+
+    printf("Digite a primeira string: ");
+    fgets(s1, sizeof(s1), stdin);
+    printf("Digite a segunda string: ");
+    fgets(s2, sizeof(s2), stdin);
+
+    // Avança até o fim da primeira string
+    while (*p != '\0' && *p != '\n') p++;
+
+    // Remove o \n se necessário
+    if (*p == '\n') *p = '\0';
+
+    // Concatena
+    while (*s2 != '\0') {
+        *p = *s2;
+        p++;
+        s2++;
+    }
+    *p = '\0';
+
+    printf("Concatenada: %s\n", s1);
+    return 0;
+}
