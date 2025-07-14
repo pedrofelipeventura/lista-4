@@ -1,0 +1,18 @@
+#include <stdio.h>
+
+#define TAM 5
+
+int main() {
+    int vi[TAM] = {1, 2, 3, 4, 5};
+    float vf[TAM] = {1.1, 2.2, 3.3, 4.4, 5.5};
+
+    printf("Enderecos dos inteiros:\n");
+    for (int i = 0; i < TAM; i++)
+        printf("vi[%d] = %d, endereco = %p\n", i, vi[i], (void*)&vi[i]);
+
+    printf("\nEnderecos dos floats:\n");
+    for (int i = 0; i < TAM; i++)
+        printf("vf[%d] = %.1f, endereco = %p\n", i, vf[i], (void*)&vf[i]);
+
+    return 0;
+}
